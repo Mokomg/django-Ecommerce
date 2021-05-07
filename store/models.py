@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(_("Name"), max_length=255, db_index=True)
@@ -8,6 +9,10 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = 'categories'
+
+    def get_absolute_url(self):
+        return reverse("store:category_list", args=[self.slug])
+    
 
     def __str__(self):
         return self.name
