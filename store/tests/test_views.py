@@ -1,8 +1,9 @@
-from unittest import skip # provides us the ability to skip test
+from unittest import skip  # provides us the ability to skip test
 
-from django.test import TestCase, Client, RequestFactory # Client helps us simulate a web browser to test views
-from django.http import HttpRequest
 from django.contrib.auth.models import User
+from django.http import HttpRequest
+from django.test import (  # Client helps us simulate a web browser to test views
+    Client, RequestFactory, TestCase)
 from django.urls import reverse
 
 from store.models import Category, Product
