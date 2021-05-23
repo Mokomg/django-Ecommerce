@@ -16,15 +16,18 @@ class Basket():
             basket = self.session["basket_session_key"] = {}
         self.basket = basket
 
-    def add(self, product, product_qty):
+    def add(self, product, qty):
         """
         Adding and updating the users basket session data
         """
-        product_id = product.id
+        product_id = str(product.id)
 
-        if product_id not in self.basket: # checks if product is in the basket session
-            self.basket[product_id] = {"price": str(product.price), "qty": int(product_qty)}
-        self.session.modified = True # tells django we've modified the session
+        if product_id in self.basket:
+            self.basket[product_id]['qty'] = qty
+        else:
+            self.basket[product_id] = {'price': str(product.price), 'qty': qty}
+
+        self.save()
 
     def __iter__(self):
         """
@@ -50,3 +53,27 @@ class Basket():
 
     def get_total_price(self):
         return sum(Decimal(item["price"]) * item["qty"] for item in self.basket.values())
+
+    def delete(self, product):
+        """
+        Delete item from session data
+        """
+        product_id = str(product)
+        if product_id in self.basket:
+            del self.basket[product_id]
+            self.save()
+
+    def update(self, product, qty):
+        """
+        Update values in session data
+        """
+        if product not in self.basket:
+            self.basket[str(product)]["qty"] = qty
+
+        self.save()
+
+    def save(self):
+        """
+        mark the session as "modified" to make sure it gets saved
+        """
+        self.session.modified = True # tells django we've modified the session
