@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import (AuthenticationForm, )
+
 from .models import UserBase
 
 
@@ -14,7 +16,7 @@ class RegistrationForm(forms.ModelForm):
         model = UserBase
         fields = ("user_name", 'email',)
 
-##### Form field validations
+    ##### Form field validations
     def clean_user_name(self):
         user_name = self.cleaned_data["user_name"].lower()
         r = UserBase.objects.filter(user_name=user_name)
@@ -48,3 +50,36 @@ class RegistrationForm(forms.ModelForm):
         self.fields["password2"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Repeat Password"}
         )
+
+
+class UserLoginForm(AuthenticationForm):
+
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={"class": "form-control mb-3", "placeholder": "Username", "id": "login-username"}
+    ))
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            "class": "form-control",
+            "placeholder": "password",
+            "id": "login-pwd",
+        }
+    ))
+
+
+class UserEditForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='Account email (can not be changed)', max_length=200, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email', 'readonly': 'readonly'}))
+
+    first_name = forms.CharField(
+        label='Username', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Firstname', 'id': 'form-lastname'}))
+
+    class Meta:
+        model = UserBase
+        fields = ('email', 'first_name',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
