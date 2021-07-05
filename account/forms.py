@@ -1,6 +1,5 @@
 from django import forms
 from .models import UserBase
-from django.utils.translation import gettext_lazy as _
 
 
 class RegistrationForm(forms.ModelForm):
@@ -11,12 +10,11 @@ class RegistrationForm(forms.ModelForm):
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Repeat Password", widget=forms.PasswordInput)
 
-
     class Meta:
         model = UserBase
         fields = ("user_name", 'email',)
 
-
+##### Form field validations
     def clean_user_name(self):
         user_name = self.cleaned_data["user_name"].lower()
         r = UserBase.objects.filter(user_name=user_name)
@@ -36,7 +34,7 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Please use another Email, that is already taken")
         return email
 
-    def __init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["user_name"].widget.attrs.update(
             {"class": "form-control mb-3", "placeholder": "Username"}
