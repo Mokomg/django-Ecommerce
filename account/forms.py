@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import (AuthenticationForm, )
+from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm, SetPasswordForm, )
 
 from .models import UserBase
 
@@ -83,3 +83,37 @@ class UserEditForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].required = True
         self.fields['email'].required = True
+
+
+class PwdResetForm(PasswordResetForm):
+    email = forms.EmailField(max_length=254, widget=forms.TextInput(
+        attrs={"class": "form-control mb-3", "placeholder": "Email", "id": "form-email"}
+    ))
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        u = UserBase.objects.filter(email=email)
+        if not u:
+            raise forms.ValidationError(
+                "Unfortunately we cannot find that account"
+            )
+        return email
+
+
+class PwdResetConfirmForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="New Password", widget=forms.PasswordInput(
+        attrs={"class": "form-control mb-3", "placeholder": "New Password", "id": "form-newpass"}
+    ))
+    new_password2 = forms.CharField(
+        label="Repeat Password", widget=forms.PasswordInput(
+            attrs={"class": "form-control mb-3", "placeholder": "New Password", "id": "form-new-pass2"}
+        ))
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        u = UserBase.objects.filter(email=email)
+        if not u:
+            raise forms.ValidationError(
+                "Unfortunately"
+            )
