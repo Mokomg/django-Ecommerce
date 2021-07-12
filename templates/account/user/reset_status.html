@@ -30,12 +30,10 @@
                                 {% if 'email' in request.get_full_path %}
                                         <h3 class="mb-4">Password Reset Success</h3>
                                         <p>Check your email for instructions</p>
-                                    <p>{{ request.get_full_path }}</p>
                                 {% endif%}
                                 {% if 'complete' in request.get_full_path %}
                                         <h3 class="mb-4">Password Reset Success</h3>
                                         <a href="{% url "account:login" %}">Login</a>
-                                    <p>{{ request.get_full_path }}</p>
                                 {% endif%}
                             </div>       
                         </div>
