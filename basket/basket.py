@@ -1,5 +1,5 @@
 from decimal import Decimal
-
+from django.conf import settings
 from store.models import Product
 
 
@@ -11,9 +11,9 @@ class Basket():
 
     def __init__(self, request):
         self.session = request.session
-        basket = self.session.get("basket_session_key")
-        if "basket_session_key" not in request.session:
-            basket = self.session["basket_session_key"] = {}
+        basket = self.session.get(settings.BASKET_SESSION_ID)
+        if settings.BASKET_SESSION_ID not in request.session:
+            basket = self.session[settings.BASKET_SESSION_ID] = {}
         self.basket = basket
 
     def add(self, product, qty):
@@ -49,10 +49,20 @@ class Basket():
         """
         Get the basket data and count the qty of items
         """
+        print("in __len__")
+        print("basket: ", self.basket)
         return sum(item["qty"] for item in self.basket.values())
 
     def get_total_price(self):
-        return sum(Decimal(item["price"]) * item["qty"] for item in self.basket.values())
+        subtotal = sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+
+        if subtotal == 0:
+            shipping = Decimal(0.00)
+        else:
+            shipping = Decimal(11.50)
+
+        total = subtotal + Decimal(shipping)
+        return total
 
     def delete(self, product):
         """
@@ -77,3 +87,8 @@ class Basket():
         mark the session as "modified" to make sure it gets saved
         """
         self.session.modified = True # tells django we've modified the session
+
+
+    def clear(self):
+        del self.session[settings.BASKET_SESSION_ID]
+        self.save()

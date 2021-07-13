@@ -7,13 +7,16 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+from orders.views import user_orders
 from .forms import RegistrationForm, UserEditForm
 from .models import UserBase
 from .tokens import account_activation_token
 
 @login_required
 def dashboard(request):
-    return render(request, "account/user/dashboard.html", {})
+    orders = user_orders(request)
+    print("orders: ", orders)
+    return render(request, "account/user/dashboard.html", {"orders": orders})
 
 def account_register(request):
     if request.user.is_authenticated:
