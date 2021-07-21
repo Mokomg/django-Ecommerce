@@ -1,0 +1,19 @@
+{% extends "../base.html" %}
+
+{% load static %}
+
+{% block stylesheet %}
+<link href='{% static "payment/css/main.css" %}' rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="login d-flex align-items-center py-5">
+            <div class="col-12 col-lg-4 mx-auto">
+                {% block sub_content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,1 +1,15 @@
-error
+{% extends "./sub_base.html" %}
+
+{% block title %}
+Invalid Payment
+{% endblock %}
+
+{% block sub_content %}
+<div class="container">
+    <div>
+        <h3 class="mb-4">Error</h3>
+        <p>Please contact our support team <a href="#">here</a>.</p>
+        <a href="{% url 'account:dashboard' %}">Dashboard</a>
+    </div>
+</div>
+{% endblock %}

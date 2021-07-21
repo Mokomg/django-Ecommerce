@@ -1,8 +1,13 @@
-{% extends "store/base.html" %}
+{% extends "../base.html" %}
 {% load static %}
 {% block title %}
-{{ product.name }}
+{% if product %}{{ product.title }} {% else %} {{ product }}{% endif %}
 {% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'store/css/store.css' %}"/>
+{% endblock %}
+
 {% block content %}
 
     <main class="pt-2">
@@ -31,7 +36,7 @@
                 <div><span class="h3">£{{ product.price }}</span><p class="text-muted">includes tax</p></div>
                        <div class="">
                                     <label for="select">Qty</label>
-                                    <select id="select" class="h6" style="width:50px;height:40px;">
+                                    <select id="select" class="h6 store-select-dropdown" ">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>

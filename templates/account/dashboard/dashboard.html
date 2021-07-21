@@ -1,6 +1,8 @@
-{% extends "../../store/base.html" %} {% load static %} {% block title %}Basket Summary{%endblock %} {% block content %}
+{% extends "../../base.html" %}
+{% block title %}Dashboard{%endblock %}
 
-<main class="pt-5">
+{% block content %}
+
   <div class="container" style="max-width: 1000px">
     <div class="col-12">
       <h1 class="h2">Your Dashboard</h1>
@@ -11,7 +13,7 @@
     </div>
     <hr />
   </div>
-  <div class="container" style="max-width: 1000px">
+  <div class="container">
     {% for order in orders %}
     <div class="row g-3">
 

@@ -12,11 +12,13 @@ from .forms import RegistrationForm, UserEditForm
 from .models import UserBase
 from .tokens import account_activation_token
 
+
 @login_required
 def dashboard(request):
     orders = user_orders(request)
     print("orders: ", orders)
-    return render(request, "account/user/dashboard.html", {"orders": orders})
+    return render(request, "account/dashboard/dashboard.html", {"orders": orders})
+
 
 def account_register(request):
     if request.user.is_authenticated:
@@ -35,14 +37,15 @@ def account_register(request):
             current_site = get_current_site(request) # get website's email
             subject = 'Activeate your Account'
             message = render_to_string("account/registration/account_activation_email.html", {
-                'user': user,
+                'dashboard': user,
                 'domain':  current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user)
             })
             print("current site: ", current_site.domain)
             user.email_user(subject=subject, message=message)
-            return HttpResponse('registered succesfully and activation sent')
+            # return HttpResponse('registered successfully and activation sent')
+            return render(request, 'account/registration/registation_email_confirm.html', {"form": registerForm})
 
     else:
         registerForm = RegistrationForm()
@@ -64,6 +67,7 @@ def account_activate(request, uidb64, token):
     else:
         return render(request, "account/registration/activation_invalid.html")
 
+
 @login_required()
 def edit_details(request):
     if request.method == "POST":
@@ -73,7 +77,7 @@ def edit_details(request):
     else:
         user_form = UserEditForm(instance=request.user)
 
-    return render(request, "account/user/edit_details.html", {"user_form": user_form})
+    return render(request, "account/dashboard/edit_details.html", {"user_form": user_form})
 
 
 @login_required()

@@ -1,3 +1,5 @@
+import os
+
 import stripe as stripe
 
 import json
@@ -7,6 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
+from django.conf import settings
 
 from basket.basket import Basket
 
@@ -22,6 +25,7 @@ def order_placed(request):
 class Error(TemplateView):
     template_name = 'payment/error.html'
 
+
 @login_required
 def basketView(request):
 
@@ -32,14 +36,18 @@ def basketView(request):
 
     print("total"),
 
-    stripe.api_key = "sk_test_51JCUg3KvELx4Sm5hfSomtogvUhgSZTH0bTL8AIO3tA3os8jQYXVxiDlJSD7ao07xiuwCLcZI2rIb4oCxaDTLI2DZ00KEgxP5bQ"
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    # stripe.api_key = "sk_test_51JCUg3KvELx4Sm5hfSomtogvUhgSZTH0bTL8AIO3tA3os8jQYXVxiDlJSD7ao07xiuwCLcZI2rIb4oCxaDTLI2DZ00KEgxP5bQ"
     intent = stripe.PaymentIntent.create(
         amount=total,
         currency='cad',
         metadata={'userid': request.user.id}
     )
 
-    return render(request, 'payment/home.html', {"client_secret": intent.client_secret})
+    return render(request, 'payment/payment_form.html', {
+        "client_secret": intent.client_secret,
+        "STRIPE_PUBLISHABLE_KEY": os.environ.get("STRIPE_PUBLISHABLE_KEY")}
+                  )
 
 
 @csrf_exempt

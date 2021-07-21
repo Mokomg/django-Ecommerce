@@ -114,7 +114,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # Basket session ID
 BASKET_SESSION_ID = "basket"
 
-# setup custom user model
+# setup custom dashboard model
 AUTH_USER_MODEL = "account.UserBase"
 LOGIN_REDIRECT_URL = "/account/dashboard"
 LOGIN_URL = "/account/login/"
@@ -122,9 +122,10 @@ LOGIN_URL = "/account/login/"
 PASSWORD_RESET_TIMEOUT_DAYS = 2
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-
-STRIPE_PUBLISHABLE_KEY = "pk_test_51JCUg3KvELx4Sm5hsZduoTWMBghBv5URhepTSx55zH7Bu2Cccnc6dO8r56xzy7TtcYsFyVpbH564ozEihRAWpyLT00pTGCmmv7"
+######## Stripe payment
+os.environ.setdefault("STRIPE_PUBLISHABLE_KEY", "pk_test_51JCUg3KvELx4Sm5hsZduoTWMBghBv5URhepTSx55zH7Bu2Cccnc6dO8r56xzy7TtcYsFyVpbH564ozEihRAWpyLT00pTGCmmv7")
 STRIPE_SECRET_KEY = "sk_test_51JCUg3KvELx4Sm5hfSomtogvUhgSZTH0bTL8AIO3tA3os8jQYXVxiDlJSD7ao07xiuwCLcZI2rIb4oCxaDTLI2DZ00KEgxP5bQ"
+
 # Stripe Payment
 STRIPE_ENDPOINT_SECRET = "whsec_1mcU0Oe0zvlheUQOJiQZiBsHWbf9X99s"
 # Stripe listen --forward-to localhost:8000/payment/webhook

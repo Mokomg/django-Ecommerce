@@ -1,4 +1,5 @@
-var stripe = Stripe("pk_test_51JCUg3KvELx4Sm5hsZduoTWMBghBv5URhepTSx55zH7Bu2Cccnc6dO8r56xzy7TtcYsFyVpbH564ozEihRAWpyLT00pTGCmmv7")
+// var stripe = Stripe("pk_test_51JCUg3KvELx4Sm5hsZduoTWMBghBv5URhepTSx55zH7Bu2Cccnc6dO8r56xzy7TtcYsFyVpbH564ozEihRAWpyLT00pTGCmmv7")
+var stripe = Stripe(STRIPE_PUBLISHABLE_KEY)
 
 var elem = document.getElementById("submit");
 clientSecret = elem.getAttribute("data-secret");
@@ -69,7 +70,7 @@ form.addEventListener("submit", function (ev) {
                     //    execution. Set up a  webhook or plugin to listen for the
                     //    payment_intent.succeeded event that handles any business critical
                     //    post-payment actions.
-                        window.location.replace("http://127.0.0.1:8000/payment/orderplaced/"); // forward the user to this url when the result is succeeded
+                        window.location.replace("http://127.0.0.1:8000/payment/orderplaced/"); // forward the dashboard to this url when the result is succeeded
                     }
                 }
             });
